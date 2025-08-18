@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            # Clerk user_id is 32 chars- 48 to be safe
-            $table->string('clerk_id', length: 48);
         });
 
         // Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -40,7 +38,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
+        // Schema::dropIfExists('password_reset_tokens');
+        // Schema::dropIfExists('sessions');
     }
 };

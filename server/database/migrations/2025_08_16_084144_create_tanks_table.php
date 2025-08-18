@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string("tank_name", length: 64);
             $table->string("tank_description", length: 256);
-            $table->foreignId('clerk_id')->constrained(table: 'users', indexName: 'clerk_id')->onDelete('cascade');
+            $table->string('clerk_id', length: 48)->unique();
         });
     }
 
