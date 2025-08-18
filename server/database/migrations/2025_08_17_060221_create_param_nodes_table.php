@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->decimal('param_value', total: 8, places: 3);
-            $table->foreignId('param_id')->constrained()->onDelete('cascade');
+            $table->foreignId('param_ulid')->constrained()->onDelete('cascade');
+            $table->ulid('param_node_ulid');
         });
     }
 

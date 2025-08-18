@@ -11,14 +11,10 @@ class Tank extends Model
     use HasFactory;
 
     protected $fillable = ["tank_name", "tank_description"];
+    protected $primaryKey = 'tank_ulid';
 
     public function params()
     {
         return $this->hasMany(Param::class);
-    }
-
-    public function users()
-    {
-        return $this->belongsTo(User::class, 'clerk_id');
     }
 }

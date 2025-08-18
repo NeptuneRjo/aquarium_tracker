@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("tank_name", length: 64);
             $table->string("tank_description", length: 256);
             $table->string('clerk_id', length: 48)->unique();
+            $table->ulid('tank_ulid');
         });
     }
 

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->string("param_name", length: 32);
             $table->string("param_unit", length: 16);
-            $table->foreignId('tank_id')->constrained()->onDelete('cascade');
+            $table->foreignId('tank_ulid')->constrained()->onDelete('cascade');
+            $table->ulid('param_ulid');
         });
     }
 

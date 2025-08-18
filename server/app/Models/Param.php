@@ -11,6 +11,7 @@ class Param extends Model
     use HasFactory;
 
     protected $fillable = ["param_name", "param_unit"];
+    protected $primaryKey = "param_ulid";
 
     public function param_nodes()
     {
