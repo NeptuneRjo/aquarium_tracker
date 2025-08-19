@@ -4,14 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ParamNodes extends Model
 {
     /** @use HasFactory<\Database\Factories\ParamNodesFactory> */
     use HasFactory;
 
-    protected $fillable = ['param_value'];
-    protected $primaryKey = "param_node_ulid";
+    protected $fillable = ["param_id", "param_value"];
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->param_node_ulid = Str::ulid();
+        });
+    }
 
     public function params()
     {

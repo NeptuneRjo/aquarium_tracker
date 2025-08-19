@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tanks', function (Blueprint $table) {
+        Schema::create('param_nodes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("tank_name", length: 64);
-            $table->string("tank_description", length: 256);
-            $table->string('clerk_id', length: 48)->unique();
-            $table->ulid('tank_ulid');
+            $table->decimal('param_value', total: 8, places: 3);
+            $table->ulid('param_node_ulid');
+            $table->foreignId('param_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tanks');
+        Schema::dropIfExists('param_nodes');
     }
 };
