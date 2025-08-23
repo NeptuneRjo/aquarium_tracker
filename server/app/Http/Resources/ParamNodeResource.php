@@ -17,8 +17,8 @@ class ParamNodeResource extends JsonResource
         return [
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "param_value" => $this->param_value,
-            "param_node_ulid" => $this->param_node_ulid
+            "value" => $this->param_value,
+            "ulid" => $this->param_node_ulid
         ];
     }
 }

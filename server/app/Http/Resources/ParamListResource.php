@@ -17,9 +17,10 @@ class ParamListResource extends JsonResource
         return [
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "param_name" => $this->param_name,
-            "param_unit" => $this->param_unit,
-            "param_ulid" => $this->param_ulid,
+            "name" => $this->param_name,
+            "unit" => $this->param_unit,
+            "ulid" => $this->param_ulid,
+            "latest_value" => ParamNodeResource::make($this->latest_value)
         ];
     }
 }

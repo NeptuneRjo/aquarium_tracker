@@ -15,12 +15,12 @@ class TankResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "tank_ulid" => $this->tank_ulid,
+            "ulid" => $this->tank_ulid,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "tank_name" => $this->tank_name,
-            "tank_description" => $this->tank_description,
-            "params" => ParamResource::collection($this->params)
+            "name" => $this->tank_name,
+            "description" => $this->tank_description,
+            "params" => ParamListResource::collection($this->params)
         ];
     }
 }
