@@ -19,7 +19,7 @@ class TankFactory extends Factory
         return [
             "tank_name" => fake()->name(),
             "tank_description" => fake()->realText(64),
-            "clerk_id" => "user_" . fake()->numberBetween(1000, 9999) . 'abcd',
+            "clerk_id" => "user_1234abcd",
         ];
     }
 }

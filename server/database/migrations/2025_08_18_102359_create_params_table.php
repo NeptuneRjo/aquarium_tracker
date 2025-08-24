@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('params', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("param_name", length: 32);
-            $table->string("param_unit", length: 16);
+            $table->string('param_name', length: 32);
+            $table->string('param_unit', length: 16);
             $table->ulid('param_ulid');
+            $table->string('clerk_id', length: 48);
             $table->foreignId('tank_id')->constrained()->onDelete('cascade');
         });
     }

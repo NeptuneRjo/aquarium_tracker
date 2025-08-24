@@ -18,8 +18,9 @@ class ParamNodesFactory extends Factory
     public function definition(): array
     {
         return [
-            "param_value" => 1.2,
+            "param_value" => fake()->randomFloat(2, 1, 99),
             "param_id" => Param::inRandomOrder()->first()->id,
+            "clerk_id" => "user_1234abcd",
         ];
     }
 }

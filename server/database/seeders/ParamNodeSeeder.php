@@ -13,6 +13,6 @@ class ParamNodeSeeder extends Seeder
      */
     public function run(): void
     {
-        ParamNodes::factory()->count(10)->create();
+        ParamNodes::factory()->count(20)->create();
     }
 }

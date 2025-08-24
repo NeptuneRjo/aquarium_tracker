@@ -20,7 +20,8 @@ class ParamFactory extends Factory
         return [
             "param_name" => fake()->name(),
             "param_unit" => "PPM",
-            "tank_id" => Tank::inRandomOrder()->first()->id
+            "tank_id" => Tank::inRandomOrder()->first()->id,
+            "clerk_id" => "user_1234abcd",
         ];
     }
 }
