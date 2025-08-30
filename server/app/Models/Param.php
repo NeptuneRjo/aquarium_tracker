@@ -11,7 +11,7 @@ class Param extends Model
     /** @use HasFactory<\Database\Factories\ParamFactory> */
     use HasFactory;
 
-    protected $fillable = ["param_name", "param_unit", "tank_id"];
+    protected $fillable = ["param_name", "param_unit", "tank_id", "clerk_id"];
 
     protected static function booted()
     {
@@ -28,5 +28,10 @@ class Param extends Model
     public function tanks()
     {
         return $this->belongsTo(Tank::class);
+    }
+
+    public function latest_value()
+    {
+        return $this->hasOne(ParamNodes::class)->latestOfMany();
     }
 }

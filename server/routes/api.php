@@ -23,6 +23,12 @@ Route::middleware([EnsureHasClerkId::class])->group(function () {
     Route::prefix('params')->group(function () {
         Route::controller(ParamController::class)->group(function () {
             Route::get('/{param_ulid}', 'show');
+
+            Route::post('/', 'store');
+
+            Route::patch('/{param_ulid}', 'edit');
+
+            Route::delete('/{param_ulid}', 'delete');
         });
     });
 });

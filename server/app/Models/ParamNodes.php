@@ -11,7 +11,7 @@ class ParamNodes extends Model
     /** @use HasFactory<\Database\Factories\ParamNodesFactory> */
     use HasFactory;
 
-    protected $fillable = ["param_id", "param_value"];
+    protected $fillable = ["param_id", "param_value", "clerk_id"];
 
     protected static function booted()
     {

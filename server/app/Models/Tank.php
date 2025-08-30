@@ -11,7 +11,7 @@ class Tank extends Model
     /** @use HasFactory<\Database\Factories\TankFactory> */
     use HasFactory;
 
-    protected $fillable = ["tank_name", "tank_description"];
+    protected $fillable = ["tank_name", "tank_description", "clerk_id"];
 
     protected static function booted()
     {

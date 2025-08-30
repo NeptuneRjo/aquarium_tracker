@@ -17,8 +17,8 @@ class TankFactory extends Factory
     public function definition(): array
     {
         return [
-            "tank_name" => fake()->name(),
-            "tank_description" => fake()->realText(64),
+            "tank_name" => 'tank one',
+            "tank_description" => 'tank description paragraph',
             "clerk_id" => "user_1234abcd",
         ];
     }
