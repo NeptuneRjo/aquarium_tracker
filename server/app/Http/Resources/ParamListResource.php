@@ -20,7 +20,7 @@ class ParamListResource extends JsonResource
             "name" => $this->param_name,
             "unit" => $this->param_unit,
             "ulid" => $this->param_ulid,
-            "latest_value" => ParamNodeResource::make($this->latest_value)
+            "latest_value" => $this->latest_value->param_value
         ];
     }
 }

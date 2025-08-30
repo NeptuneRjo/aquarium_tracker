@@ -20,7 +20,7 @@ class ParamNodes extends Model
         });
     }
 
-    public function params()
+    public function param()
     {
         return $this->belongsTo(Param::class);
     }

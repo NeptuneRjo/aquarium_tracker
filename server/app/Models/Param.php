@@ -32,6 +32,6 @@ class Param extends Model
 
     public function latest_value()
     {
-        return $this->hasOne(ParamNodes::class)->latestOfMany();
+        return $this->hasOne(ParamNodes::class)->latestOfMany()->select('param_value');
     }
 }

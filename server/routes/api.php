@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ParamController;
+use App\Http\Controllers\ParamNodeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TankController;
@@ -29,6 +30,16 @@ Route::middleware([EnsureHasClerkId::class])->group(function () {
             Route::patch('/{param_ulid}', 'edit');
 
             Route::delete('/{param_ulid}', 'delete');
+        });
+    });
+
+    Route::prefix('nodes')->group(function () {
+        Route::controller(ParamNodeController::class)->group(function () {
+            Route::post('/', 'store');
+
+            Route::patch('/{param_node_ulid}', 'edit');
+
+            Route::delete('/{param_node_ulid}', 'delete');
         });
     });
 });
