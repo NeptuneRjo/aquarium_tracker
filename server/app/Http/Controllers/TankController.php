@@ -44,6 +44,32 @@ class TankController extends Controller
         }
     }
 
+    private function create_defaults(string|array|null $clerk_id)
+    {
+        $default_values = [
+            ["Alkalinity", "dKH"],
+            ["Salinity", "PPT"],
+            ["Nitrate", "PPM"],
+            ["Nitrite", "PPM"],
+            ["Calcium", "PPM"],
+            ["Magnesium", "PPM"],
+            ["Phosphate", "PPM"],
+            ["pH", "pH"]
+        ];
+
+        $default_params = [];
+
+        foreach ($default_values as $values) {
+            $default_params[] = [
+                "param_name" => $values[0],
+                "param_unit" => $values[1],
+                "clerk_id" => $clerk_id
+            ];
+        }
+
+        return $default_params;
+    }
+
     public function store(Request $request)
     {
         try {
@@ -59,11 +85,14 @@ class TankController extends Controller
                 'clerk_id' => $clerk_id
             ]);
 
+            $tank->params()->createMany($this->create_defaults($clerk_id));
+
             return response()
                 ->json(TankResource::make($tank), 200);
         } catch (ValidationException $e) {
             return response()->json([$e->getMessage()], 400);
         } catch (Exception $e) {
+            echo $e->getMessage();
             return response()->json([$e->getMessage()], 400);
         }
     }

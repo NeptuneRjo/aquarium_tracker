@@ -83,7 +83,7 @@ class TankTest extends TestCase
                     ->where('name', 'test tank')
                     ->where('description', 'test description')
                     ->has('ulid')
-                    ->has('params')
+                    ->has('params', 8)
                     ->etc();
             });
     }

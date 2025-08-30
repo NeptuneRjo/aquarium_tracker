@@ -21,7 +21,7 @@ class ParamResource extends JsonResource
             "unit" => $this->param_unit,
             "ulid" => $this->param_ulid,
             "values" => ParamNodeResource::collection($this->param_nodes),
-            "latest_value" => $this->latest_value->param_value
+            "latest_value" => $this->latest_value->param_value ?? 0.0
         ];
     }
 }
