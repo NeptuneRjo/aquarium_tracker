@@ -12,8 +12,10 @@ const RootLayout = () => {
   return (
     <ClerkProvider tokenCache={tokenCache}>
       <StatusBar style="light" />
-      <SafeAreaProvider style={styles.container}>
-        <Text style={styles.title}>Aquarium Tracker</Text>
+      <SafeAreaProvider style={styles.main}>
+        <Text style={styles.title}>
+          Aquarium Tracker
+        </Text>
         <Slot />
       </SafeAreaProvider>
     </ClerkProvider>
@@ -23,9 +25,9 @@ const RootLayout = () => {
 export default RootLayout
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.primary,
-    flex: 1,
+  main: {
+    backgroundColor: Colors.secondary,
+    paddingTop: -Constants.statusBarHeight,
   },
   title: {
     backgroundColor: Colors.accent,
@@ -33,9 +35,11 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     paddingTop: Constants.statusBarHeight,
     color: Colors.secondary,
-    fontWeight: 800,
+    fontWeight: 700,
     fontSize: 21,
-    textShadowColor: Colors.primary,
-    textShadowRadius: 14
+    textShadowColor: 'black',
+    textShadowRadius: 6,
+    // Centers the content in slot with the screen
+    marginBottom: -Constants.statusBarHeight
   }
 })
