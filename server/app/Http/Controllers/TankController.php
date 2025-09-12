@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
 use App\Http\Resources\TankListResource;
 use App\Http\Resources\TankResource;
 use Illuminate\Http\Request;
@@ -19,10 +20,9 @@ class TankController extends Controller
             $tanks = Tank::where('clerk_id', $clerk_id)
                 ->orderBy('updated_at', 'desc')->get();
 
-            return response()
-                ->json(TankListResource::collection($tanks), 200);
+            return ApiResponse::response(TankListResource::collection($tanks));
         } catch (Exception $e) {
-            return response()->json([$e->getMessage()], 400);
+            return ApiResponse::response([], 400, $e->getMessage());
         }
     }
 
@@ -34,13 +34,12 @@ class TankController extends Controller
                 ->where('tank_ulid', $request->tank_ulid)
                 ->firstOrFail();
 
-            return response()
-                ->json(TankResource::make($tank), 200);
+            return ApiResponse::response(TankResource::make($tank));
         } catch (ModelNotFoundException $e) {
             $message = "No tank found with that ULID.";
-            return response()->json($message, 404);
+            return ApiResponse::response([], 404, $message);
         } catch (Exception $e) {
-            return response()->json([$e->getMessage()], 400);
+            return ApiResponse::response([], 404, $e->getMessage());
         }
     }
 
@@ -87,13 +86,10 @@ class TankController extends Controller
 
             $tank->params()->createMany($this->create_defaults($clerk_id));
 
-            return response()
-                ->json(TankResource::make($tank), 200);
-        } catch (ValidationException $e) {
-            return response()->json([$e->getMessage()], 400);
+            return ApiResponse::response(TankResource::make($tank));
         } catch (Exception $e) {
-            echo $e->getMessage();
-            return response()->json([$e->getMessage()], 400);
+            return ApiResponse::response([], 400, $e->getMessage());
+            // return response()->json([$e->getMessage()], 400);
         }
     }
 
@@ -124,13 +120,14 @@ class TankController extends Controller
 
             $tank->save();
 
-            return response()
-                ->json(TankResource::make($tank), 200);
+            return ApiResponse::response(TankResource::make($tank));
         } catch (ModelNotFoundException $e) {
             $message = "No tank found with that ULID.";
-            return response()->json($message, 404);
+            return ApiResponse::response([], 404, $message);
+            // return response()->json($message, 404);
         } catch (Exception $e) {
-            return response()->json([$e->getMessage()], 400);
+            return ApiResponse::response([], 400, $e->getMessage());
+            // return response()->json([$e->getMessage()], 400);
         }
     }
 
@@ -146,8 +143,7 @@ class TankController extends Controller
 
             $success_message = 'Tank ' . $request->tank_ulid . ' successfully deleted.';
 
-            return response()
-                ->json(['message' => $success_message], 200);
+            return ApiResponse::response([], 200, $success_message);
         } catch (ModelNotFoundException $e) {
             $message = "No tank found with that ULID.";
             return response()->json($message, 404);

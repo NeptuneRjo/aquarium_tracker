@@ -28,12 +28,18 @@ class TankTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
-                $json->has(0, function (AssertableJson $json) {
-                    $json
-                        ->where('name', 'tank one')
-                        ->where('description', 'tank description paragraph')
-                        ->etc();
-                });
+                $json
+                    ->where('status', 200)
+                    ->has('message')
+                    ->has('data', function (AssertableJson $json) {
+                        $json->has(0, function (AssertableJson $json) {
+                            $json
+                                ->where('name', 'tank one')
+                                ->where('description', 'tank description paragraph')
+                                ->etc();
+                        });
+                    })
+                    ->etc();
             });
     }
 
@@ -49,11 +55,16 @@ class TankTest extends TestCase
             ->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json
-                    ->has('name')
-                    ->has('description')
-                    ->has('ulid')
-                    ->has('params')
-                    ->etc();
+                    ->where('status', 200)
+                    ->has('message')
+                    ->has('data', function (AssertableJson $json) {
+                        $json
+                            ->has('name')
+                            ->has('description')
+                            ->has('ulid')
+                            ->has('params')
+                            ->etc();
+                    });
             });
     }
 
@@ -64,7 +75,14 @@ class TankTest extends TestCase
             ->get('/api/tanks/' . 'fake-ulid');
 
         $response
-            ->assertStatus(404);
+            ->assertStatus(404)
+            ->assertJson(function (AssertableJson $json) {
+                $json
+                    ->where('status', 404)
+                    ->where('data', [])
+                    ->where('message', "No tank found with that ULID.")
+                    ->etc();
+            });
     }
 
     public function test_can_create_new_tank(): void
@@ -80,11 +98,16 @@ class TankTest extends TestCase
             ->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json
-                    ->where('name', 'test tank')
-                    ->where('description', 'test description')
-                    ->has('ulid')
-                    ->has('params', 8)
-                    ->etc();
+                    ->where('status', 200)
+                    ->has('message')
+                    ->has('data', function (AssertableJson $json) {
+                        $json
+                            ->where('name', 'test tank')
+                            ->where('description', 'test description')
+                            ->has('ulid')
+                            ->has('params', 8)
+                            ->etc();
+                    });
             });
     }
 
@@ -98,7 +121,13 @@ class TankTest extends TestCase
             ]);
 
         $response
-            ->assertStatus(400);
+            ->assertStatus(400)
+            ->assertJson(function (AssertableJson $json) {
+                $json
+                    ->where('status', 400)
+                    ->where('data', [])
+                    ->has('message');
+            });
     }
 
     public function test_can_update_tank(): void
@@ -116,13 +145,18 @@ class TankTest extends TestCase
             ->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json
-                    ->has('name')
-                    ->has('description')
-                    ->has('ulid')
-                    ->has('params')
-                    ->where('name', 'new name')
-                    ->where('description', '')
-                    ->etc();
+                    ->where('status', 200)
+                    ->has('message')
+                    ->has('data', function (AssertableJson $json) {
+                        $json
+                            ->has('name')
+                            ->has('description')
+                            ->has('ulid')
+                            ->has('params')
+                            ->where('name', 'new name')
+                            ->where('description', '')
+                            ->etc();
+                    });
             });
     }
 
@@ -137,18 +171,32 @@ class TankTest extends TestCase
             ]);
 
         $response
-            ->assertStatus(400);
+            ->assertStatus(400)
+            ->assertJson(function (AssertableJson $json) {
+                $json
+                    ->where('status', 400)
+                    ->where('data', [])
+                    ->has('message');
+            });
     }
 
     public function test_can_delete_tank()
     {
         $tank = Tank::factory()->create();
+        $success_message = 'Tank ' . $tank->tank_ulid . ' successfully deleted.';
 
         $response = $this
             ->withHeaders($this->clerk_headers)
             ->delete('/api/tanks/' . $tank->tank_ulid);
 
         $response
-            ->assertStatus(200);
+            ->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) use ($success_message) {
+                $json
+                    ->where('status', 200)
+                    ->where('data', [])
+                    ->where('message', $success_message)
+                    ->etc();
+            });
     }
 }
