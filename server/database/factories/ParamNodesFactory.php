@@ -20,7 +20,7 @@ class ParamNodesFactory extends Factory
         return [
             "param_value" => fake()->randomFloat(2, 1, 99),
             "param_id" => Param::inRandomOrder()->first()->id,
-            "clerk_id" => "user_1234abcd",
+            "clerk_id" => "user_32Z7QStsrO2xyPH5to0UabJ1iXg",
         ];
     }
 }

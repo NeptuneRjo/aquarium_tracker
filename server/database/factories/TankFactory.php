@@ -19,7 +19,7 @@ class TankFactory extends Factory
         return [
             "tank_name" => 'tank one',
             "tank_description" => 'tank description paragraph',
-            "clerk_id" => "user_1234abcd",
+            "clerk_id" => "user_32Z7QStsrO2xyPH5to0UabJ1iXg",
         ];
     }
 }
