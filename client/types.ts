@@ -15,12 +15,15 @@ export type Param = {
     latest_value: number
 }
 
-export type Tank = {
+export type Tanks = {
     ulid: string,
     created_at: Date,
     updated_at: Date,
     name: string,
     description: string,
+}
+
+export type Tank = Tanks & {
     params: Param[]
 }
 

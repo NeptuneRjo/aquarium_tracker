@@ -3,24 +3,30 @@ import React, { useEffect, useState } from 'react'
 import SignInButton from '../components/SignInButton'
 import { useUser } from '@clerk/clerk-expo'
 import GlobalStyles from '../constants/styles'
-import { Tank } from '../types'
+import { Tanks } from '../types'
 import TankService from '../services/tankService'
+import TankCard from '../components/TankCard'
 
 
 const Home = () => {
-  const { isSignedIn, user } = useUser()
+  const { isSignedIn, user, isLoaded: clerkIsLoaded } = useUser()
   
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [tanks, setTanks] = useState<Tank[]>([])
+  const [tanks, setTanks] = useState<Tanks[]>([])
   const [error, setError] = useState<any>(undefined)
 
   useEffect(() => {
+    if (!clerkIsLoaded) return;
+
     if (isSignedIn) {
       ;(async () => {
-        TankService.getAllTanks(user.id).then((res) => {
+        try {
+          const res = await TankService.getAllTanks(user.id)
           setTanks(res.data)
           setIsLoading(false)
-        }).catch((err) => setError(err))
+        } catch (error) {
+          setError(error)
+        }
       })()
     }
   }, [])
@@ -40,7 +46,7 @@ const Home = () => {
       ) : (
         <>
           {tanks.map((tank, key) => (
-            <Text key={key}>{tank.name}</Text>
+            <TankCard tank={tank} key={key} />
           ))}
         </> 
       )}
