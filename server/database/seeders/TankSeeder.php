@@ -13,6 +13,6 @@ class TankSeeder extends Seeder
      */
     public function run(): void
     {
-        Tank::factory()->count(1)->create();
+        Tank::factory()->count(2)->create();
     }
 }
