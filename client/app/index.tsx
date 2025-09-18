@@ -15,21 +15,21 @@ const Home = () => {
   const [tanks, setTanks] = useState<Tanks[]>([])
   const [error, setError] = useState<any>(undefined)
 
-  useEffect(() => {
-    if (!clerkIsLoaded) return;
+  const getAndSetTanks = async () => {
+    if (!clerkIsLoaded) return
 
     if (isSignedIn) {
-      ;(async () => {
-        try {
-          const res = await TankService.getAllTanks(user.id)
-          setTanks(res.data)
-          setIsLoading(false)
-        } catch (error) {
-          setError(error)
-        }
-      })()
+      TankService.getAllTanks(user.id)
+        .then((res) => setTanks(res.data))
+        .catch((err) => setError(err))
     }
-  }, [])
+
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+      ;(async () => await getAndSetTanks())()
+  }, [clerkIsLoaded, isSignedIn])
 
   if (!isSignedIn) {
       return (
@@ -44,11 +44,11 @@ const Home = () => {
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (
-        <>
+        <View style={styles.cards}>
           {tanks.map((tank, key) => (
             <TankCard tank={tank} key={key} />
           ))}
-        </> 
+        </View> 
       )}
     </View>
   )
@@ -56,4 +56,9 @@ const Home = () => {
 
 export default Home
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  cards: {
+    display: 'flex',
+    gap: 16
+  }
+})
