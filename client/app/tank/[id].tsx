@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import GlobalStyles from '../../constants/styles'
 
 const Tanks = () => {
   return (
-    <View>
+    <View style={GlobalStyles.container}>
       <Text>Tanks</Text>
     </View>
   )
