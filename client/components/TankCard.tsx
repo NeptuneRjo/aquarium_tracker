@@ -9,12 +9,21 @@ interface Props {
 }
 
 const TankCard = ({ tank }: Props) => {
+  const maxDescriptionLength = 124
+
+  const truncateDescription = (description: string): string => {
+    if (description.length > maxDescriptionLength) {
+      return description.substring(0, maxDescriptionLength) + '...'
+    }
+    return description
+  }
+
   return (
     <Link href={`/tank/${tank.ulid}`}>
       <View style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.name}>{tank.name}</Text>
-          <Text style={styles.description}>{tank.description}</Text>
+          <Text style={styles.description}>{truncateDescription(tank.description)}</Text>
         </View>
         <View style={styles.stats}>
           <Text style={styles.text}>Last Updated:</Text>
