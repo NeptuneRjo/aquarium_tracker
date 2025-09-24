@@ -1,4 +1,4 @@
-import { ApiResponse, Tanks } from "../types"
+import { ApiResponse, Tank, Tanks } from "../types"
 import Config from "react-native-config"
 
 const BASE_ROUTE = process.env.EXPO_PUBLIC_API_URL
@@ -10,7 +10,7 @@ const getAllTanks = async (clerk_id: string): Promise<ApiResponse<Tanks[]>> => {
     }).then(res => res.json())
 }
 
-const getTank = async (clerk_id: string, ulid: string): Promise<ApiResponse<Tanks>> => {
+const getTank = async (clerk_id: string, ulid: string): Promise<ApiResponse<Tank>> => {
     return fetch(`${BASE_ROUTE}/api/tanks/${ulid}`, {
         headers: { 'Clerk-Id': clerk_id },
         method: 'GET'
