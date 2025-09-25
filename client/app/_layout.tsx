@@ -13,9 +13,11 @@ const RootLayout = () => {
     <ClerkProvider tokenCache={tokenCache}>
       <StatusBar style="light" />
       <SafeAreaProvider style={styles.main}>
-        <Text style={styles.title}>
-          Aquarium Tracker
-        </Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>
+            Aquarium Tracker
+          </Text>
+        </View>
         <Slot />
       </SafeAreaProvider>
     </ClerkProvider>
@@ -28,18 +30,21 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.secondary,
     paddingTop: -Constants.statusBarHeight,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexDirection: 'column'
   },
-  title: {
+  header: {
     backgroundColor: Colors.accent,
     padding: 16,
     paddingVertical: 18,
     paddingTop: Constants.statusBarHeight,
+  },
+  title: {
     color: Colors.secondary,
     fontWeight: 700,
     fontSize: 21,
     textShadowColor: 'black',
-    textShadowRadius: 6,
-    // Centers the content in slot with the screen
-    marginBottom: -Constants.statusBarHeight
+    textShadowRadius: 6
   }
 })
