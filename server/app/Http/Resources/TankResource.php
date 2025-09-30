@@ -20,7 +20,7 @@ class TankResource extends JsonResource
             "updated_at" => $this->updated_at,
             "name" => $this->tank_name,
             "description" => $this->tank_description,
-            "params" => ParamListResource::collection($this->params)
+            "params" => ParamResource::collection($this->params)
         ];
     }
 }

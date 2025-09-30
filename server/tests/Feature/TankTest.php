@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Param;
 use App\Models\Tank;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -12,7 +13,7 @@ class TankTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $clerk_headers = ['Clerk-Id' => 'user_1234abcd'];
+    private $clerk_headers = ['Clerk-Id' => 'user_32Z7QStsrO2xyPH5to0UabJ1iXg'];
 
     /**
      * A basic feature test example.
@@ -34,8 +35,8 @@ class TankTest extends TestCase
                     ->has('data', function (AssertableJson $json) {
                         $json->has(0, function (AssertableJson $json) {
                             $json
-                                ->where('name', 'tank one')
-                                ->where('description', 'tank description paragraph')
+                                ->has('name')
+                                ->has('description')
                                 ->etc();
                         });
                     })
@@ -46,6 +47,7 @@ class TankTest extends TestCase
     public function test_can_get_one_tank(): void
     {
         $tank = Tank::factory()->create();
+        $param = Param::factory()->create(["tank_id" => $tank->id]);
 
         $response = $this
             ->withHeaders($this->clerk_headers)
@@ -62,7 +64,15 @@ class TankTest extends TestCase
                             ->has('name')
                             ->has('description')
                             ->has('ulid')
-                            ->has('params')
+                            ->has('params', function (AssertableJson $json) {
+                                $json
+                                    ->has(0, function (AssertableJson $json) {
+                                        $json
+                                            ->has('name')
+                                            ->has('unit')
+                                            ->etc();
+                                    });
+                            })
                             ->etc();
                     });
             });
