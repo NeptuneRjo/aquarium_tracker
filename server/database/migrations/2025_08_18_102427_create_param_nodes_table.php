@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('param_nodes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->decimal('param_value', total: 8, places: 3);
+            $table->decimal('param_value', total: 8, places: 2);
             $table->ulid('param_node_ulid');
             $table->string('clerk_id', length: 48);
             $table->foreignId('param_id')->constrained()->onDelete('cascade');
