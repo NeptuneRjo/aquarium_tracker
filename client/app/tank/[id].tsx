@@ -5,8 +5,9 @@ import TankService from '../../services/tankService'
 import { useUser } from '@clerk/clerk-expo'
 import { useLocalSearchParams } from 'expo-router'
 import { Tank as TankType } from '../../types'
-import { SceneMap, TabView } from 'react-native-tab-view'
-import Param from '../../components/Param'
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
+import ParamView from '../../components/ParamView'
+import Colors from '../../constants/colors'
 
 interface Route {
   key: string,
@@ -34,22 +35,9 @@ const Tank = () => {
   }
   
   useEffect(() => {
-    ;(async() => getAndSetTank(user!.id, id as string))()
+    ;(async() => await getAndSetTank(user!.id, id as string))()
   }, [])
   
-  const renderScene = ({ route }: { route: Route }) => {
-    const param = tank!.params.find((item) => item.name === route.key)!
-    return <Param param={param} />
-  }
-  
-  let routes: Route[] = []
-  const createRoutes = () => {
-    if (tank !== undefined) {
-      tank.params.map((param) => routes.push({ key: param.name, title: param.name }))
-    }
-  }
-  createRoutes()
-
   if (isLoading || tank === undefined) {
     return (
       <View style={GlobalStyles.container}>
@@ -58,6 +46,15 @@ const Tank = () => {
     )
   }
 
+  const renderScene = ({ route }: { route: Route }) => {
+    const param = tank!.params.find((item) => item.name === route.key)!
+    return <ParamView param={param} />
+  }
+  
+  const routes: Route[] = tank.params.map((param) => {
+    return { key: param.name, title: param.name }
+  })
+
   return (
     <TabView 
       navigationState={{ index, routes }}
@@ -65,10 +62,30 @@ const Tank = () => {
       onIndexChange={setIndex}
       initialLayout={{ width: layout.width }}
       swipeEnabled={true}
+      renderTabBar={props => 
+        <TabBar 
+          {...props} 
+          style={styles.tabBar}
+          activeColor='#FFFFFF'
+          inactiveColor={Colors.secondary}
+          tabStyle={styles.tabBar}
+          indicatorStyle={styles.tabBar}
+        />
+      }
+      pagerStyle={styles.tabView}
     />
   )
 }
 
 export default Tank
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: Colors.accent,
+    color: Colors.secondary,
+  },
+  tabView: {
+    margin: 16,
+    marginRight: 27
+  }
+})

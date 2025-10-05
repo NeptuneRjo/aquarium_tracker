@@ -6,13 +6,12 @@ export type ParamNode = {
 }
 
 export type Param = {
-    values: ParamNode[] | undefined,
     name: string,
     created_at: Date,
     updated_at: Date,
     unit: string,
     ulid: string,
-    latest_value: number
+    values: ParamNode[]
 }
 
 export type Tanks = {

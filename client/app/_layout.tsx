@@ -29,22 +29,20 @@ export default RootLayout
 const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.secondary,
-    paddingTop: -Constants.statusBarHeight,
     display: 'flex',
     justifyContent: 'flex-start',
     flexDirection: 'column'
   },
   header: {
     backgroundColor: Colors.accent,
-    padding: 16,
-    paddingVertical: 18,
-    paddingTop: Constants.statusBarHeight,
   },
   title: {
     color: Colors.secondary,
     fontWeight: 700,
     fontSize: 21,
     textShadowColor: 'black',
-    textShadowRadius: 6
+    textShadowRadius: 8,
+    margin: 16,
+    marginTop: Constants.statusBarHeight + 16
   }
 })
