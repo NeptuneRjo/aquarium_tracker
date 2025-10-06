@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import GlobalStyles from '../../constants/styles'
 import TankService from '../../services/tankService'
 import { useUser } from '@clerk/clerk-expo'
-import { useLocalSearchParams } from 'expo-router'
+import { Stack, useLocalSearchParams } from 'expo-router'
 import { Tank as TankType } from '../../types'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import ParamView from '../../components/ParamView'
@@ -41,13 +41,14 @@ const Tank = () => {
   if (isLoading || tank === undefined) {
     return (
       <View style={GlobalStyles.container}>
+        <Stack.Screen options={{ headerTitle: 'Loading...' }} />
         <Text>Loading...</Text>
       </View>
     )
   }
 
   const renderScene = ({ route }: { route: Route }) => {
-    const param = tank!.params.find((item) => item.name === route.key)!
+    const param = tank.params.find((item) => item.name === route.key)!
     return <ParamView param={param} />
   }
   
@@ -56,24 +57,27 @@ const Tank = () => {
   })
 
   return (
-    <TabView 
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-      swipeEnabled={true}
-      renderTabBar={props => 
-        <TabBar 
-          {...props} 
-          style={styles.tabBar}
-          activeColor='#FFFFFF'
-          inactiveColor={Colors.secondary}
-          tabStyle={styles.tabBar}
-          indicatorStyle={styles.tabBar}
-        />
-      }
-      pagerStyle={styles.tabView}
-    />
+    <>
+      <Stack.Screen options={{ headerTitle: tank.name }} />
+      <TabView 
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+        swipeEnabled={true}
+        renderTabBar={props => 
+          <TabBar 
+            {...props} 
+            style={styles.tabBar}
+            activeColor='#FFFFFF'
+            inactiveColor={Colors.secondary}
+            tabStyle={styles.tabBar}
+            indicatorStyle={styles.tabBar}
+          />
+        }
+        pagerStyle={styles.tabView}
+      />
+    </>
   )
 }
 

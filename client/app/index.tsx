@@ -6,6 +6,7 @@ import GlobalStyles from '../constants/styles'
 import { Tanks } from '../types'
 import TankService from '../services/tankService'
 import TankCard from '../components/TankCard'
+import { Stack } from 'expo-router'
 
 
 const Home = () => {
@@ -41,6 +42,7 @@ const Home = () => {
 
   return (
     <View style={GlobalStyles.container}>
+      <Stack.Screen options={{ headerTitle: "Aquarium Tracker" }} />
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (

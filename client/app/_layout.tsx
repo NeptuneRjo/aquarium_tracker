@@ -1,48 +1,31 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import React from 'react'
 import { ClerkProvider } from '@clerk/clerk-expo'
-import { Slot } from 'expo-router'
+import { Stack } from 'expo-router'
 import { tokenCache } from '@clerk/clerk-expo/token-cache'
 import Colors from '../constants/colors'
-import { StatusBar } from 'expo-status-bar'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import Constants from 'expo-constants'
 
 const RootLayout = () => {
   return (
     <ClerkProvider tokenCache={tokenCache}>
-      <StatusBar style="light" />
-      <SafeAreaProvider style={styles.main}>
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            Aquarium Tracker
-          </Text>
-        </View>
-        <Slot />
-      </SafeAreaProvider>
+      <Stack screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors.accent
+        },
+        headerTitleStyle: {
+          color: Colors.secondary,
+          fontWeight: 700,
+          fontSize: 21,
+        },
+        headerTintColor: Colors.secondary
+      }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="tank" />
+      </Stack>
     </ClerkProvider>
   )
 }
 
 export default RootLayout
 
-const styles = StyleSheet.create({
-  main: {
-    backgroundColor: Colors.secondary,
-    display: 'flex',
-    justifyContent: 'flex-start',
-    flexDirection: 'column'
-  },
-  header: {
-    backgroundColor: Colors.accent,
-  },
-  title: {
-    color: Colors.secondary,
-    fontWeight: 700,
-    fontSize: 21,
-    textShadowColor: 'black',
-    textShadowRadius: 8,
-    margin: 16,
-    marginTop: Constants.statusBarHeight + 16
-  }
-})
+const styles = StyleSheet.create({})
