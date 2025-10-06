@@ -35,6 +35,7 @@ const Home = () => {
   if (!isSignedIn) {
       return (
         <View style={GlobalStyles.container}>
+          <Stack.Screen options={{ headerTitle: "Aquarium Tracker" }} />
           <SignInButton />
         </View>
       )

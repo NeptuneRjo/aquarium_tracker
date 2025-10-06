@@ -20,7 +20,7 @@ const RootLayout = () => {
         headerTintColor: Colors.secondary
       }}>
         <Stack.Screen name="index" />
-        <Stack.Screen name="tank" />
+        <Stack.Screen name="tank/[id]" />
       </Stack>
     </ClerkProvider>
   )
