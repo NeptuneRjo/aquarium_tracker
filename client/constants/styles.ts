@@ -6,7 +6,6 @@ const GlobalStyles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: -Constants.statusBarHeight - 16
     }
 }) 
 
