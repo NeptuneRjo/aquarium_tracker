@@ -7,6 +7,7 @@ import { Tanks } from '../types'
 import TankService from '../services/tankService'
 import TankCard from '../components/TankCard'
 import { Stack } from 'expo-router'
+import StorageService from '../services/asyncStorageService'
 
 
 const Home = () => {
@@ -17,19 +18,29 @@ const Home = () => {
   const [error, setError] = useState<any>(undefined)
 
   const getAndSetTanks = async () => {
-    if (!clerkIsLoaded) return
-
     if (isSignedIn) {
-      TankService.getAllTanks(user.id)
-        .then((res) => setTanks(res.data))
-        .catch((err) => setError(err))
+      const jsonValue = await StorageService.getData('tanks')
+
+      if (jsonValue !== null) {
+        setTanks(JSON.parse(jsonValue))
+      } else {
+        TankService.getAllTanks(user.id)
+          .then(async ({ data }) => {
+            const json = JSON.stringify(data)
+            await StorageService.setData('tanks', json)
+            setTanks(data)
+          })
+          .catch((err) => setError(err))
+      }
     }
 
     setIsLoading(false)
   }
 
   useEffect(() => {
+    if (clerkIsLoaded) {
       ;(async () => await getAndSetTanks())()
+    }
   }, [clerkIsLoaded, isSignedIn])
 
   if (!isSignedIn) {

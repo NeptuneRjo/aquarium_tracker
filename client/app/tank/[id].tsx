@@ -8,6 +8,7 @@ import { Tank as TankType } from '../../types'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import ParamView from '../../components/ParamView'
 import Colors from '../../constants/colors'
+import StorageService from '../../services/asyncStorageService'
 
 interface Route {
   key: string,
@@ -16,7 +17,7 @@ interface Route {
 
 const Tank = () => {  
   const layout = useWindowDimensions()
-  const { user, isSignedIn } = useUser()
+  const { user, isSignedIn, isLoaded: clerkIsLoaded } = useUser()
   const { id } = useLocalSearchParams()
   
   const [tank, setTank] = useState<TankType>()
@@ -25,18 +26,30 @@ const Tank = () => {
   
   const [index, setIndex] = React.useState(0)
   
-  const getAndSetTank = async (clerk_id: string, tank_ulid: string) => {
-    TankService.getTank(clerk_id, tank_ulid)
-    .then((res) => {
-      setTank(res.data)
+  const getAndSetTank = async () => {
+    if (isSignedIn) {
+      const jsonValue = await StorageService.getData(`tank-${id}`)
+
+      if (jsonValue !== null) {
+        setTank(JSON.parse(jsonValue))
+      } else {
+        TankService.getTank(user.id, id as string)
+        .then(async ({ data }) => {
+          const json = JSON.stringify(data)
+          await StorageService.setData(`tank-${data.ulid}`, json)
+          setTank(data)
+        })
+        .catch((err) => setError(err)) 
+      }
       setIsLoading(false)
-    })
-    .catch((err) => setError(err))
+    }
   }
   
   useEffect(() => {
-    ;(async() => await getAndSetTank(user!.id, id as string))()
-  }, [])
+    if (clerkIsLoaded) {
+      ;(async() => await getAndSetTank())()
+    }
+  }, [clerkIsLoaded, isSignedIn])
   
   if (isLoading || tank === undefined) {
     return (
