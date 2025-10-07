@@ -22,12 +22,11 @@ const Home = () => {
       const jsonValue = await StorageService.getData('tanks')
 
       if (jsonValue !== null) {
-        setTanks(JSON.parse(jsonValue))
+        setTanks(jsonValue)
       } else {
         TankService.getAllTanks(user.id)
           .then(async ({ data }) => {
-            const json = JSON.stringify(data)
-            await StorageService.setData('tanks', json)
+            await StorageService.setData('tanks', data)
             setTanks(data)
           })
           .catch((err) => setError(err))
