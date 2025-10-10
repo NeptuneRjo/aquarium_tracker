@@ -6,9 +6,7 @@ import GlobalStyles from '../constants/styles'
 import { Tanks } from '../types'
 import TankService from '../services/tankService'
 import TankCard from '../components/TankCard'
-import { Stack } from 'expo-router'
-import StorageService from '../services/asyncStorageService'
-
+import TankStorage from '../services/tankStorage'
 
 const Home = () => {
   const { isSignedIn, user, isLoaded: clerkIsLoaded } = useUser()
@@ -19,14 +17,14 @@ const Home = () => {
 
   const getAndSetTanks = async () => {
     if (isSignedIn) {
-      const jsonValue = await StorageService.getData('tanks')
+      const jsonValue = await TankStorage.getAllTanks()
 
       if (jsonValue !== null) {
         setTanks(jsonValue)
       } else {
         TankService.getAllTanks(user.id)
           .then(async ({ data }) => {
-            await StorageService.setData('tanks', data)
+            await TankStorage.storeAllTanks(data)
             setTanks(data)
           })
           .catch((err) => setError(err))

@@ -26,7 +26,10 @@ const createTank = async (
     item: { name: string, description: string | undefined }
 ): Promise<ApiResponse<Tank>> => {
     return fetch(`${BASE_ROUTE}/api/tanks`, {
-        headers: { 'Clerk-Id': clerk_id },
+        headers: { 
+            'Clerk-Id': clerk_id, 
+            'Content-Type': 'application/json'
+        },
         method: 'POST',
         body: JSON.stringify(item)
     }).then(res => res.json())

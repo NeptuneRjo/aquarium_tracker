@@ -8,7 +8,7 @@ import { Tank as TankType } from '../../types'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import ParamView from '../../components/ParamView'
 import Colors from '../../constants/colors'
-import StorageService from '../../services/asyncStorageService'
+import TankStorage from '../../services/tankStorage'
 
 interface Route {
   key: string,
@@ -28,15 +28,14 @@ const Tank = () => {
   
   const getAndSetTank = async () => {
     if (isSignedIn) {
-      const jsonValue = await StorageService.getData(`tank-${id}`)
+      const jsonValue = await TankStorage.getTank(id as string)
 
       if (jsonValue !== null) {
         setTank(JSON.parse(jsonValue))
       } else {
         TankService.getTank(user.id, id as string)
         .then(async ({ data }) => {
-          const json = JSON.stringify(data)
-          await StorageService.setData(`tank-${data.ulid}`, json)
+          await TankStorage.storeTank(data)
           setTank(data)
         })
         .catch((err) => setError(err)) 
