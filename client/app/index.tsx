@@ -45,24 +45,26 @@ const Home = () => {
   if (!isSignedIn) {
       return (
         <View style={GlobalStyles.container}>
-          <Stack.Screen options={{ headerTitle: "Aquarium Tracker" }} />
           <SignInButton />
         </View>
       )
   }
 
-  return (
-    <View style={GlobalStyles.container}>
-      <Stack.Screen options={{ headerTitle: "Aquarium Tracker" }} />
-      {isLoading ? (
+  if (isLoading) {
+    return (
+      <View style={GlobalStyles.container}>
         <Text>Loading...</Text>
-      ) : (
-        <View style={styles.cards}>
-          {tanks.map((tank, key) => (
-            <TankCard tank={tank} key={key} />
-          ))}
-        </View> 
-      )}
+      </View>
+    )
+  }
+
+  return (
+    <View style={GlobalStyles.container}>      
+      <View style={styles.cards}>
+        {tanks.map((tank, key) => (
+          <TankCard tank={tank} key={key} />
+        ))}
+      </View> 
     </View>
   )
 }
