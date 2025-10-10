@@ -1,13 +1,11 @@
-import { Button, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import React from 'react'
 import { ClerkProvider } from '@clerk/clerk-expo'
-import { Link, Stack, useNavigation, useRouter } from 'expo-router'
+import { Link, Stack } from 'expo-router'
 import { tokenCache } from '@clerk/clerk-expo/token-cache'
 import Colors from '../constants/colors'
 
 const RootLayout = () => {
-  const router = useRouter()
-
   return (
     <ClerkProvider tokenCache={tokenCache}>
       <Stack screenOptions={{
@@ -25,12 +23,12 @@ const RootLayout = () => {
           name="index" 
           options={{ 
             headerTitle: 'Aquarium Tracker',
-            headerRight: () => (
-              <Link href="/create">
-                <Button title="New Tank" onPress={() => router.navigate('/create')} />
+            headerRight: (props) => (
+              <Link {...props} href="/create" style={styles.btn}>
+                New Tank
               </Link>
-            )
-          }} 
+            ),
+          }}
         />
         <Stack.Screen 
           name="create/index" 
@@ -44,4 +42,12 @@ const RootLayout = () => {
 
 export default RootLayout
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  btn: {
+    color: Colors.secondary,
+    fontWeight: 600,
+    fontSize: 18,
+    padding: 6,
+    margin: 4,
+  },
+})
