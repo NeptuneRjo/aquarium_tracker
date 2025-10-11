@@ -2,8 +2,7 @@ import { Tank, Tanks } from "../types";
 import StorageService from "./asyncStorageService";
 
 const storeTank = async (data: Tank) => {
-    const json = JSON.stringify(data)
-    await StorageService.setData(`tank-${data.ulid}`, json)
+    await StorageService.setData(`tank-${data.ulid}`, data)
 }  
 
 const getTank = async (ulid: string) => {
@@ -15,11 +14,10 @@ const removeTank = async (ulid: string) => {
 }
 
 const storeAllTanks = async (data: Tanks[]) => {
-    const json = JSON.stringify(data)
-    await StorageService.setData('tanks', json)
+    await StorageService.setData('tanks', data)
 }
 
-const getAllTanks = async () => {
+const getAllTanks = async (): Promise<Tanks[] | null> => {
     return await StorageService.getData('tanks')
 }
 
