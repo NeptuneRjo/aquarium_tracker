@@ -17,7 +17,8 @@ const RootLayout = () => {
           fontWeight: 700,
           fontSize: 21,
         },
-        headerTintColor: Colors.secondary
+        headerTintColor: Colors.secondary,
+        headerShadowVisible: false
       }}>
         <Stack.Screen 
           name="index" 

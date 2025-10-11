@@ -99,9 +99,14 @@ const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: Colors.accent,
     color: Colors.secondary,
+    width: 'auto',
+    paddingVertical: 6,
+    elevation: 0,
+    borderTopWidth: 0,
+    shadowOpacity: 0
   },
   tabView: {
     margin: 16,
-    marginRight: 27
+    marginRight: 27,
   }
 })
