@@ -40,18 +40,18 @@ const Home = () => {
     }
   }, [clerkIsLoaded, isSignedIn])
 
-  if (!isSignedIn) {
-      return (
-        <View style={GlobalStyles.container}>
-          <SignInButton />
-        </View>
-      )
-  }
-
-  if (isLoading) {
+  if (isLoading || !clerkIsLoaded) {
     return (
       <View style={GlobalStyles.container}>
         <Text>Loading...</Text>
+      </View>
+    )
+  }
+
+  if (!isSignedIn) {
+    return (
+      <View style={GlobalStyles.container}>
+        <SignInButton />
       </View>
     )
   }
