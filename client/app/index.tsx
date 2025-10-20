@@ -19,6 +19,7 @@ const Home = () => {
   const [error, setError] = useState<any>(undefined)
 
   const [modalVisable, setModalVisable] = useState<boolean>(false)
+  const [modalLoading, setModalLoading] = useState<boolean>(false)
   const [selectedTank, setSelectedTank] = useState<Tanks>()
 
   const getAndSetTanks = async () => {
@@ -44,12 +45,15 @@ const Home = () => {
 
   const deleteTank = async () => {
     if (isSignedIn && selectedTank !== undefined) {
+      setModalLoading(true)
       TankService.deleteTank(user?.id, selectedTank.ulid)
         .then(async (res) => {
           TankStorage.removeTank(selectedTank.ulid)
-          TankStorage.removeAllTanks()
-          setModalVisable(false)
-          await getAndSetTanks()
+            .then(async () => {
+              TankStorage.removeAllTanks()
+              setModalVisable(false)
+              await getAndSetTanks()
+            })
         })
     }
   }
@@ -85,29 +89,33 @@ const Home = () => {
           backdropColor={Colors.transparent}
       >
           <View style={styles.modal}>
+              {modalLoading ? (
+                <View style={styles.modalContent}>
+                  <Text>Deleting tank...</Text>
+                </View>
+              ) : (
               <View style={styles.modalContent}>
-              <Text style={[styles.text, { fontWeight: 500, fontSize: 18, textAlign: 'center' }]}>
-                  Are you sure you want to delete '{selectedTank?.name}'?
-              </Text>
-              <View style={styles.modalButtons}>
+                <Text style={[styles.text, { fontWeight: 500, fontSize: 18, textAlign: 'center' }]}>
+                    Are you sure you want to delete '{selectedTank?.name}'?
+                </Text>
+                <View style={styles.modalButtons}>
                   <Pressable 
-                  style={GlobalStyles.btn} 
-                  onPress={() => setModalVisable(false)}
+                    style={GlobalStyles.btn} 
+                    onPress={() => setModalVisable(false)}
                   >
-                  <Text style={[styles.text, { fontWeight: 600, width: 90, textAlign: 'center' }]}>Back</Text>
+                    <Text style={[styles.text, { fontWeight: 600, width: 90, textAlign: 'center' }]}>Back</Text>
                   </Pressable>
                   <Pressable 
-                  style={[GlobalStyles.btn, { backgroundColor: Colors.secondary }]}
-                  onPress={() => deleteTank()}
+                    style={[GlobalStyles.btn, { backgroundColor: Colors.secondary }]}
+                    onPress={() => deleteTank()}
                   >
-                  <Text 
-                      style={[styles.text, { color: Colors.primary, fontWeight: 600 }]}
-                  >
-                      Confirm
-                  </Text>
+                    <Text style={[styles.text, { color: Colors.primary, fontWeight: 600 }]}>
+                        Confirm
+                    </Text>
                   </Pressable>
+                </View>
               </View>
-              </View>
+              )}
           </View>
       </Modal>
       <View style={styles.cards}>
