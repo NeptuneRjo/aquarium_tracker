@@ -91,7 +91,9 @@ const Home = () => {
           <View style={styles.modal}>
               {modalLoading ? (
                 <View style={styles.modalContent}>
-                  <Text>Deleting tank...</Text>
+                  <Text style={[styles.text, { textAlign: 'center', fontWeight: 500, fontSize: 18 }]}>
+                    Deleting tank...
+                  </Text>
                 </View>
               ) : (
               <View style={styles.modalContent}>
