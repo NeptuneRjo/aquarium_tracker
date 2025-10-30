@@ -7,7 +7,8 @@ import { Tanks } from '../types'
 import TankService from '../services/tankService'
 import TankCard from '../components/TankCard'
 import TankStorage from '../services/tankStorage'
-import { useRouter } from 'expo-router'
+import { Link, Stack, useRouter } from 'expo-router'
+import Colors from '../constants/colors'
 
 const Home = () => {
   const { navigate } = useRouter()
@@ -61,6 +62,16 @@ const Home = () => {
   }
 
   return (
+    <>
+      <Stack.Screen 
+        options={{ 
+          headerRight: (props) => (
+            <Link {...props} href="/create" style={styles.btn}>
+              New Tank
+            </Link>
+          ),
+        }} 
+      />
     <View style={GlobalStyles.container}>
       <View style={styles.cards}>
         {tanks.map((tank, key) => (
@@ -72,6 +83,7 @@ const Home = () => {
         ))}
       </View> 
     </View>
+    </>
   )
 }
 
@@ -81,5 +93,12 @@ const styles = StyleSheet.create({
   cards: {
     display: 'flex',
     gap: 16
-  }
+  },
+  btn: {
+    color: Colors.secondary,
+    fontWeight: 600,
+    fontSize: 18,
+    padding: 6,
+    margin: 4,
+  },
 })
