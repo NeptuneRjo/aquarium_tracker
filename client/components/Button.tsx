@@ -5,10 +5,11 @@ import Colors from '../constants/colors'
 interface Props {
     variant?: 'primary' | 'secondary' | 'warn' | undefined,
     children: any,
-    onPress?: PressableProps['onPress']
+    onPress?: PressableProps['onPress'],
+	disabled?: boolean
 }
 
-const Button = ({ variant = "primary", children, onPress }: Props) => {
+const Button = ({ variant = "primary", children, onPress, disabled = false }: Props) => {
     let buttonStyles: {} = {}
     const textStyles = [styles.text]
 
@@ -25,7 +26,11 @@ const Button = ({ variant = "primary", children, onPress }: Props) => {
 	}
 
     return (
-    	<Pressable onPress={onPress} style={[styles.base, buttonStyles]}>
+    	<Pressable 
+			onPress={onPress} 
+			style={[styles.base, buttonStyles, disabled ? styles.disabled : undefined]} 
+			disabled={disabled}
+		>
 			<View style={styles.container}>
             	<Text style={textStyles}>{children}</Text>
 			</View>
@@ -56,4 +61,7 @@ const styles = StyleSheet.create({
 		fontWeight: 600,
 		fontSize: 16
 	},
+	disabled: {
+		opacity: 0.65
+	}
 })
