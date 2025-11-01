@@ -41,7 +41,10 @@ const updateTank = async (
     item: { name: string | undefined, description: string | undefined}
 ): Promise<ApiResponse<Tank>> => {
     return fetch(`${BASE_ROUTE}/api/tanks/${tank_ulid}`, {
-        headers: { 'Clerk-Id': clerk_id },
+        headers: { 
+            'Clerk-Id': clerk_id,
+            'Content-Type': 'application/json'
+        },
         method: 'PATCH',
         body: JSON.stringify(item)
     }).then(res => res.json())
