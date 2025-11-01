@@ -1,11 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, PressableProps, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Colors from '../constants/colors'
 
 interface Props {
     variant?: 'primary' | 'secondary' | 'warn' | undefined,
     children: any,
-    onPress?: () => any
+    onPress?: PressableProps['onPress']
 }
 
 const Button = ({ variant = "primary", children, onPress }: Props) => {
