@@ -32,3 +32,6 @@ export type ApiResponse<DataType> = {
     data: DataType
 }
 
+export interface iAppContext {
+    
+}

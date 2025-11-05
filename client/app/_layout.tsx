@@ -1,13 +1,12 @@
 import { StyleSheet } from 'react-native'
 import React from 'react'
-import { ClerkProvider } from '@clerk/clerk-expo'
 import { Stack } from 'expo-router'
-import { tokenCache } from '@clerk/clerk-expo/token-cache'
 import Colors from '../constants/colors'
+import { Providers } from '../context'
 
 const RootLayout = () => {
   return (
-    <ClerkProvider tokenCache={tokenCache}>
+    <Providers>
       <Stack screenOptions={{
         headerStyle: {
           backgroundColor: Colors.accent
@@ -32,7 +31,7 @@ const RootLayout = () => {
         />
         <Stack.Screen name="tank/[id]" />
       </Stack>
-    </ClerkProvider>
+    </Providers>
   )
 }
 
