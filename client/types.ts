@@ -33,5 +33,7 @@ export type ApiResponse<DataType> = {
 }
 
 export interface iAppContext {
-    
+    tanks: Tanks[],
+    appLoading: boolean, 
+    error: any
 }

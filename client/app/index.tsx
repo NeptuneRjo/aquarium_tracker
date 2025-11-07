@@ -1,51 +1,19 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import SignInButton from '../components/SignInButton'
 import { useUser } from '@clerk/clerk-expo'
 import GlobalStyles from '../constants/styles'
-import { Tanks } from '../types'
-import TankService from '../services/tankService'
 import TankCard from '../components/TankCard'
-import TankStorage from '../services/tankStorage'
 import { Link, Stack, useRouter } from 'expo-router'
 import Colors from '../constants/colors'
+import { AppContext } from '../context'
 
 const Home = () => {
   const { navigate } = useRouter()
-  const { isSignedIn, user, isLoaded: clerkIsLoaded } = useUser()
-  
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [tanks, setTanks] = useState<Tanks[]>([])
-  const [error, setError] = useState<any>(undefined)
+  const { isSignedIn, isLoaded } = useUser()
+  const { tanks, appLoading, error } = useContext(AppContext)
 
-  const getAndSetTanks = async () => {
-    setIsLoading(true)
-    
-    if (isSignedIn) {
-      const jsonValue = await TankStorage.getAllTanks()
-
-      if (jsonValue !== null) {
-        setTanks(jsonValue)
-      } else {
-        TankService.getAllTanks(user.id)
-          .then(async ({ data }) => {
-            await TankStorage.storeAllTanks(data)
-            setTanks(data)
-          })
-          .catch((err) => setError(err))
-      }
-    }
-
-    setIsLoading(false)
-  }
-
-  useEffect(() => {
-    if (clerkIsLoaded) {
-      ;(async () => await getAndSetTanks())()
-    }
-  }, [clerkIsLoaded, isSignedIn])
-
-  if (isLoading || !clerkIsLoaded) {
+  if (appLoading || !isLoaded) {
     return (
       <View style={GlobalStyles.container}>
         <Text>Loading...</Text>
