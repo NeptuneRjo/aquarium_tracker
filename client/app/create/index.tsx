@@ -5,7 +5,7 @@ import Colors from '../../constants/colors'
 import { useUser } from '@clerk/clerk-expo'
 import TankService from '../../services/tankService'
 import { Stack, useNavigation, useRouter } from 'expo-router'
-import TankStorage from '../../services/tankStorage'
+import { LocalStorage } from '../../services'
 
 const Create = () => {
   const { user, isSignedIn, isLoaded: clerkIsLoaded } = useUser()
@@ -37,7 +37,7 @@ const Create = () => {
           return
         }
 
-        await TankStorage.removeAllTanks()
+        await LocalStorage.removeData('@tanks')
         navigation.navigate('/')
       })
 

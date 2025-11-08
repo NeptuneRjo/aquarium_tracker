@@ -1,5 +1,5 @@
 import { Modal, Pressable, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import GlobalStyles from '../../constants/styles'
 import TankService from '../../services/tankService'
 import { useUser } from '@clerk/clerk-expo'
@@ -8,8 +8,9 @@ import { Tank as TankType } from '../../types'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import ParamView from '../../components/ParamView'
 import Colors from '../../constants/colors'
-import TankStorage from '../../services/tankStorage'
 import Button from '../../components/Button'
+import { AppContext } from '../../context'
+import { LocalStorage } from '../../services'
 
 interface Route {
   key: string,
@@ -21,6 +22,7 @@ const Tank = () => {
   const { user, isSignedIn, isLoaded: clerkIsLoaded } = useUser()
   const { id } = useLocalSearchParams()
   const navigation = useRouter()
+  const { tanks } = useContext(AppContext)
   
   
   const [tank, setTank] = useState<TankType>()
@@ -36,14 +38,14 @@ const Tank = () => {
 
   const getAndSetTank = async () => {
     if (isSignedIn) {
-      const jsonValue = await TankStorage.getTank(id as string)
+      const jsonValue = await LocalStorage.getData(`@tank-${id}`)
 
       if (jsonValue !== null) {
         setTank(jsonValue)
       } else {
         TankService.getTank(user.id, id as string)
         .then(async ({ data }) => {
-          await TankStorage.storeTank(data)
+          await LocalStorage.setData(`@tank-${data.ulid}`, data)
           setTank(data)
         })
         .catch((err) => setError(err)) 
@@ -57,9 +59,9 @@ const Tank = () => {
       setModalLoading(true)
       TankService.deleteTank(user.id, tank.ulid)
         .then(async () => {
-          TankStorage.removeTank(tank.ulid)
+          LocalStorage.removeData(`@tank-${tank.ulid}`)
             .then(async () => {
-              await TankStorage.removeAllTanks()
+              await LocalStorage.removeData('@tanks')
               setModalVisible(false)
               navigation.dismissAll()
               navigation.replace('/')
@@ -75,8 +77,8 @@ const Tank = () => {
       console.log(item)
       TankService.updateTank(user.id, tank.ulid, item)
         .then(async ({ data }) => {
-          await TankStorage.removeAllTanks()
-          await TankStorage.storeTank(data) 
+          await LocalStorage.removeData('@tanks')
+          await LocalStorage.setData(`@tank-${data.ulid}`, data) 
           setModalVisible(false)
         })
     }

@@ -1,8 +1,8 @@
-import { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { iAppContext, Tanks } from "../types";
 import { useUser } from "@clerk/clerk-expo";
-import TankStorage from "../services/tankStorage";
 import TankService from "../services/tankService";
+import { LocalStorage } from "../services";
 
 export const AppContext = createContext<iAppContext>({
     tanks: [],
@@ -20,15 +20,15 @@ export const AppProvider = ({ children }: { children: any }) => {
     const [appLoading, setAppLoading] = useState<boolean>(false)
 
     const getAndSetTanks = async () => {
+        setAppLoading(true)
         if (isSignedIn) {
-            setAppLoading(true)
-            const jsonValue = await TankStorage.getAllTanks()
-            if (jsonValue !== null) {
-                setTanks(jsonValue)
+            const storedValues = await LocalStorage.getData('@tanks')
+            if (storedValues !== null) {
+                setTanks(storedValues)
             } else {
                 TankService.getAllTanks(user.id)
                 .then(async ({ data }) => {
-                    await TankStorage.storeAllTanks(data)
+                    await LocalStorage.setData('@tanks', data)
                     setTanks(data)
                 })
                 .catch((err) => setError(err))
@@ -39,7 +39,7 @@ export const AppProvider = ({ children }: { children: any }) => {
 
     useEffect(() => {
         if (isLoaded) {
-        ;(async () => await getAndSetTanks())()
+            ;(async () => await getAndSetTanks())()
         }
     }, [isLoaded, isSignedIn])
 
