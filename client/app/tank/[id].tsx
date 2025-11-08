@@ -4,11 +4,10 @@ import GlobalStyles from '../../constants/styles'
 import TankService from '../../services/tankService'
 import { useUser } from '@clerk/clerk-expo'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { Tank as TankType } from '../../types'
+import { Tank } from '../../types'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
-import ParamView from '../../components/ParamView'
 import Colors from '../../constants/colors'
-import Button from '../../components/Button'
+import { Button, ParamView } from '../../components'
 import { AppContext } from '../../context'
 import { LocalStorage } from '../../services'
 
@@ -17,14 +16,14 @@ interface Route {
   title: string
 }
 
-const Tank = () => {  
+const TankPage = () => {  
   const layout = useWindowDimensions()
   const { user, isSignedIn, isLoaded } = useUser()
   const { id } = useLocalSearchParams()
   const navigation = useRouter()
   const { loading, setLoading } = useContext(AppContext)
   
-  const [tank, setTank] = useState<TankType>()
+  const [tank, setTank] = useState<Tank>()
   const [error, setError] = useState<any>()
   const [index, setIndex] = useState(0)
   
@@ -184,7 +183,7 @@ const Tank = () => {
   )
 }
 
-export default Tank
+export default TankPage
 
 const styles = StyleSheet.create({
   tabBar: {
