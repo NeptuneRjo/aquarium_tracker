@@ -30,10 +30,8 @@ const removeData = async (itemKey: string) => {
     await AsyncStorage.removeItem(itemKey)
 }
 
-const StorageService = {
+export const LocalStorage = {
     getData,
     setData,
     removeData
 }
-
-export default StorageService
