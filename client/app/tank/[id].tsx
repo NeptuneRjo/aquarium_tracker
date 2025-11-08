@@ -19,17 +19,14 @@ interface Route {
 
 const Tank = () => {  
   const layout = useWindowDimensions()
-  const { user, isSignedIn, isLoaded: clerkIsLoaded } = useUser()
+  const { user, isSignedIn, isLoaded } = useUser()
   const { id } = useLocalSearchParams()
   const navigation = useRouter()
-  const { tanks } = useContext(AppContext)
-  
+  const { loading, setLoading } = useContext(AppContext)
   
   const [tank, setTank] = useState<TankType>()
   const [error, setError] = useState<any>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  
-  const [index, setIndex] = React.useState(0)
+  const [index, setIndex] = useState(0)
   
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [tankName, setTankName] = useState<string | undefined>()
@@ -37,27 +34,26 @@ const Tank = () => {
   const [modalLoading, setModalLoading] = useState<boolean>(false)
 
   const getAndSetTank = async () => {
-    if (isSignedIn) {
-      const jsonValue = await LocalStorage.getData(`@tank-${id}`)
+    setLoading(true)
+    const storedValue = await LocalStorage.getData(`@tank-${id}`)
 
-      if (jsonValue !== null) {
-        setTank(jsonValue)
-      } else {
-        TankService.getTank(user.id, id as string)
+    if (storedValue !== null) {
+      setTank(storedValue)
+    } else {
+      TankService.getTank(user!.id, `${id}`)
         .then(async ({ data }) => {
           await LocalStorage.setData(`@tank-${data.ulid}`, data)
           setTank(data)
         })
         .catch((err) => setError(err)) 
-      }
-      setIsLoading(false)
     }
+    setLoading(false)
   }
 
   const deleteTank = async () => {
-    if (isSignedIn && tank !== undefined) {
+    if (tank !== undefined) {
       setModalLoading(true)
-      TankService.deleteTank(user.id, tank.ulid)
+      TankService.deleteTank(user!.id, tank.ulid)
         .then(async () => {
           LocalStorage.removeData(`@tank-${tank.ulid}`)
             .then(async () => {
@@ -85,12 +81,12 @@ const Tank = () => {
   }
   
   useEffect(() => {
-    if (clerkIsLoaded) {
+    if (isLoaded) {
       ;(async() => await getAndSetTank())()
     }
-  }, [clerkIsLoaded, isSignedIn])
+  }, [isLoaded, isSignedIn])
   
-  if (isLoading || tank === undefined) {
+  if (loading || tank === undefined) {
     return (
       <View style={GlobalStyles.container}>
         <Stack.Screen options={{ headerTitle: 'Loading...' }} />

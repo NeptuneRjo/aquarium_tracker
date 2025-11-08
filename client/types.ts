@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react"
+
 export type ParamNode = {
     created_at: Date,
     updated_at: Date,
@@ -34,6 +36,7 @@ export type ApiResponse<DataType> = {
 
 export interface iAppContext {
     tanks: Tanks[],
-    appLoading: boolean, 
-    error: any
+    loading: boolean, 
+    error: any,
+    setLoading: Dispatch<SetStateAction<boolean>>
 }

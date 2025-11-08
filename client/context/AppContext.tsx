@@ -6,8 +6,9 @@ import { LocalStorage } from "../services";
 
 export const AppContext = createContext<iAppContext>({
     tanks: [],
-    appLoading: false,
-    error: null
+    error: null,
+    loading: true,
+    setLoading: () => console.error('setLoading was called without AppContext.Provider')
 })
 
 export const AppProvider = ({ children }: { children: any }) => {
@@ -17,10 +18,10 @@ export const AppProvider = ({ children }: { children: any }) => {
 
     const [tanks, setTanks] = useState<Tanks[]>([])
     const [error, setError] = useState<any>(null)
-    const [appLoading, setAppLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const getAndSetTanks = async () => {
-        setAppLoading(true)
+        setLoading(true)
         if (isSignedIn) {
             const storedValues = await LocalStorage.getData('@tanks')
             if (storedValues !== null) {
@@ -34,7 +35,7 @@ export const AppProvider = ({ children }: { children: any }) => {
                 .catch((err) => setError(err))
             }
         }
-        setAppLoading(false)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -45,9 +46,10 @@ export const AppProvider = ({ children }: { children: any }) => {
 
     const contextValue = useMemo(() => ({
         tanks,
-        appLoading,
-        error
-    }), [tanks, appLoading, error])
+        loading,
+        error,
+        setLoading
+    }), [tanks, loading, error, setLoading])
 
     return (
         <AppContext.Provider value={contextValue}>

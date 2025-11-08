@@ -1,49 +1,47 @@
 import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import GlobalStyles from '../../constants/styles'
 import Colors from '../../constants/colors'
 import { useUser } from '@clerk/clerk-expo'
 import TankService from '../../services/tankService'
 import { Stack, useNavigation, useRouter } from 'expo-router'
 import { LocalStorage } from '../../services'
+import { AppContext } from '../../context'
 
 const Create = () => {
-  const { user, isSignedIn, isLoaded: clerkIsLoaded } = useUser()
+  const { user, isSignedIn, isLoaded } = useUser()
   const navigation = useRouter()
+  const { loading, setLoading } = useContext(AppContext)
 
   const [tankName, setTankName] = useState<string>('')
   const [tankDescription, setTankDescription] = useState<string>('')
   const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const submit = async () => {
     setError(null)
 
-    if (!isSignedIn || !clerkIsLoaded) {
-      return
+    if (isSignedIn && isLoaded) {
+      setLoading(true)
+  
+      const item = {
+        name: tankName,
+        description: tankDescription
+      }
+      TankService.createTank(user.id, item)
+        .then(async ({ status, data, message }) => {
+          if (status !== 200 && message.length > 0) {
+            setError(message)
+            setLoading(false)
+            return
+          }
+  
+          await LocalStorage.removeData('@tanks')
+          navigation.navigate('/')
+        })      
     }
-
-    setIsLoading(true)
-
-    const item = {
-      name: tankName,
-      description: tankDescription
-    }
-    TankService.createTank(user.id, item)
-      .then(async ({ status, data, message }) => {
-        if (status !== 200 && message.length > 0) {
-          setError(message)
-          setIsLoading(false)
-          return
-        }
-
-        await LocalStorage.removeData('@tanks')
-        navigation.navigate('/')
-      })
-
   }
 
-  if (isLoading) {
+  if (loading) {
     return (
       <View style={GlobalStyles.container}>
         <Stack.Screen options={{ headerTitle: 'Creating...' }} />

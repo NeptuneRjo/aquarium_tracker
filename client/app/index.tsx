@@ -11,9 +11,9 @@ import { AppContext } from '../context'
 const Home = () => {
   const { navigate } = useRouter()
   const { isSignedIn, isLoaded } = useUser()
-  const { tanks, appLoading, error } = useContext(AppContext)
+  const { tanks, loading, error } = useContext(AppContext)
 
-  if (appLoading || !isLoaded) {
+  if (loading || !isLoaded) {
     return (
       <View style={GlobalStyles.container}>
         <Text>Loading...</Text>
