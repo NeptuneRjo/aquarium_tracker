@@ -70,6 +70,7 @@ const TankPage = () => {
         .then(async ({ data }) => {
           await LocalStorage.removeData('@tanks')
           await LocalStorage.setData(`@tank-${data.ulid}`, data) 
+          setTank(data)
           setModalVisible(false)
         })
     }
@@ -135,46 +136,52 @@ const TankPage = () => {
         visible={modalVisible} 
         animationType='fade'
       >
-        <View style={{ padding: 12, gap: 16, display: 'flex', flex: 1 }}>
-          <View style={styles.modalCtrls}>
-            <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Editing {tank.name}</Text>
-            <Pressable onPress={() => setModalVisible(false)}>
-              <Text style={{ fontWeight: 'semibold', fontSize: 16 }}>Back</Text>
-            </Pressable>
-          </View>
-          <View style={{ padding: 0, margin: 0, flex: 3, gap: 22 }}>
-            <View style={{ gap: 8 }}>
-              <Text style={styles.label}>New Name:</Text>
-              <TextInput 
-                value={tankName}
-                onChangeText={setTankName}
-                style={styles.name}
-                placeholder={tank.name}
-                maxLength={64}
-              />
+        {modalLoading ? (
+          <View style={{ padding: 12, gap: 16, display: 'flex', flex: 1 }}>
+            <View style={styles.modalCtrls}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Editing {tank.name}</Text>
+              <Pressable onPress={() => setModalVisible(false)}>
+                <Text style={{ fontWeight: 'semibold', fontSize: 16 }}>Back</Text>
+              </Pressable>
             </View>
-            <View style={{ gap: 8 }}>
-              <Text style={styles.label}>New Description:</Text>
-              <TextInput 
-                value={tankDescription}
-                onChangeText={setTankDescription}
-                style={styles.description}
-                maxLength={256}
-                editable
-                multiline
-                placeholder={tank.description}
-              />
+            <View style={{ padding: 0, margin: 0, flex: 3, gap: 22 }}>
+              <View style={{ gap: 8 }}>
+                <Text style={styles.label}>New Name:</Text>
+                <TextInput 
+                  value={tankName}
+                  onChangeText={setTankName}
+                  style={styles.name}
+                  placeholder={tank.name}
+                  maxLength={64}
+                />
+              </View>
+              <View style={{ gap: 8 }}>
+                <Text style={styles.label}>New Description:</Text>
+                <TextInput 
+                  value={tankDescription}
+                  onChangeText={setTankDescription}
+                  style={styles.description}
+                  maxLength={256}
+                  editable
+                  multiline
+                  placeholder={tank.description}
+                />
+              </View>
+            </View>
+            <View style={[{ flexDirection: 'row', justifyContent: 'space-between', flex: 1 }]}>
+              <Button variant='warn' onPress={() => deleteTank()}>
+                Delete Tank
+              </Button>
+              <Button variant="primary" onPress={() => handleUpdate()} disabled={ !tankDescription && !tankName ? true : false }>
+                Confirm Changes
+              </Button>
             </View>
           </View>
-          <View style={[{ flexDirection: 'row', justifyContent: 'space-between', flex: 1 }]}>
-            <Button variant='warn' onPress={() => deleteTank()}>
-              Delete Tank
-            </Button>
-            <Button variant="primary" onPress={() => handleUpdate()} disabled={ !tankDescription && !tankName ? true : false }>
-              Confirm Changes
-            </Button>
+        ) : (
+          <View style={GlobalStyles.container}>
+            <Text>Loading...</Text>
           </View>
-        </View>
+        )}
       </Modal>
       <TabView 
         navigationState={{ index, routes }}
