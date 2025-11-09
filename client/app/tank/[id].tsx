@@ -19,7 +19,7 @@ const TankPage = () => {
   const { user, isSignedIn, isLoaded } = useUser()
   const { id } = useLocalSearchParams()
   const navigation = useRouter()
-  const { loading, setLoading } = useContext(AppContext)
+  const { loading, setLoading, setTanks } = useContext(AppContext)
   
   const [tank, setTank] = useState<Tank>()
   const [error, setError] = useState<any>()
@@ -64,11 +64,9 @@ const TankPage = () => {
   }
 
   const updateTank = async () => {
-    if (isSignedIn && tank !== undefined) { 
-      setModalLoading(true)
+    if (tank !== undefined) { 
       const item = { name: tankName, description: tankDescription }
-      console.log(item)
-      TankService.updateTank(user.id, tank.ulid, item)
+      TankService.updateTank(user!.id, tank.ulid, item)
         .then(async ({ data }) => {
           await LocalStorage.removeData('@tanks')
           await LocalStorage.setData(`@tank-${data.ulid}`, data) 
@@ -76,7 +74,26 @@ const TankPage = () => {
         })
     }
   }
-  
+
+  const getAndSetTanks = async () => {
+    TankService.getAllTanks(user!.id)
+      .then(async ({ data }) => {
+        await LocalStorage.setData('@tanks', data)
+        setTanks(data)
+      })
+      .catch((err) => setError(err))
+  }
+
+  const handleUpdate = async () => {
+    setModalLoading(true)
+
+    updateTank()
+      .then(async () => {
+        setModalLoading(false)
+        await getAndSetTanks()
+      })
+  }
+
   useEffect(() => {
     if (isLoaded) {
       ;(async() => await getAndSetTank())()
@@ -153,7 +170,7 @@ const TankPage = () => {
             <Button variant='warn' onPress={() => deleteTank()}>
               Delete Tank
             </Button>
-            <Button variant="primary" onPress={() => updateTank()} disabled={ !tankDescription && !tankName ? true : false }>
+            <Button variant="primary" onPress={() => handleUpdate()} disabled={ !tankDescription && !tankName ? true : false }>
               Confirm Changes
             </Button>
           </View>

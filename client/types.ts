@@ -38,5 +38,6 @@ export interface iAppContext {
     tanks: Tanks[],
     loading: boolean, 
     error: any,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    setTanks: Dispatch<SetStateAction<Tanks[]>>
 }
