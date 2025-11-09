@@ -71,6 +71,7 @@ const TankPage = () => {
           await LocalStorage.removeData('@tanks')
           await LocalStorage.setData(`@tank-${data.ulid}`, data) 
           setTank(data)
+          setModalLoading(false)
           setModalVisible(false)
         })
     }
@@ -90,8 +91,9 @@ const TankPage = () => {
 
     updateTank()
       .then(async () => {
-        setModalLoading(false)
         await getAndSetTanks()
+        setTankName(undefined)
+        setTankDescription(undefined)
       })
   }
 
@@ -136,7 +138,7 @@ const TankPage = () => {
         visible={modalVisible} 
         animationType='fade'
       >
-        {modalLoading ? (
+        {!modalLoading ? (
           <View style={{ padding: 12, gap: 16, display: 'flex', flex: 1 }}>
             <View style={styles.modalCtrls}>
               <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Editing {tank.name}</Text>
