@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, FlatList } from 'react-native'
 import React from 'react'
 import { Param, ParamNode } from '../types'
 import { LineChart } from 'react-native-gifted-charts'
-import Colors from '../constants/colors'
+import { Colors } from '../constants'
 
 interface Props {
   param: Param

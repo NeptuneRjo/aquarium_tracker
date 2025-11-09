@@ -1,10 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useContext } from 'react'
 import { useUser } from '@clerk/clerk-expo'
-import GlobalStyles from '../constants/styles'
+import { GlobalStyles, Colors } from '../constants'
 import { TankCard, SignInButton } from '../components'
 import { Link, Stack, useRouter } from 'expo-router'
-import Colors from '../constants/colors'
 import { AppContext } from '../context'
 
 const Home = () => {

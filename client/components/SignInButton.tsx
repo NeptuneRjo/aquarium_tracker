@@ -4,7 +4,7 @@ import { Link, router } from 'expo-router'
 import { useSSO } from '@clerk/clerk-expo'
 import * as WebBrowser from 'expo-web-browser'
 import * as AuthSession from 'expo-auth-session'
-import Colors from '../constants/colors'
+import { Colors } from '../constants'
 
 export const useWarmUpBrowser = () => {
   useEffect(() => {

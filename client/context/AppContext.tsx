@@ -1,8 +1,7 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { iAppContext, Tanks } from "../types";
 import { useUser } from "@clerk/clerk-expo";
-import TankService from "../services/tankService";
-import { LocalStorage } from "../services";
+import { LocalStorage, TankService } from "../services";
 
 export const AppContext = createContext<iAppContext>({
     tanks: [],

@@ -1,15 +1,13 @@
 import { Modal, Pressable, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import GlobalStyles from '../../constants/styles'
-import TankService from '../../services/tankService'
+import { GlobalStyles, Colors } from '../../constants'
 import { useUser } from '@clerk/clerk-expo'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { Tank } from '../../types'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
-import Colors from '../../constants/colors'
 import { Button, ParamView } from '../../components'
 import { AppContext } from '../../context'
-import { LocalStorage } from '../../services'
+import { LocalStorage, TankService } from '../../services'
 
 interface Route {
   key: string,

@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import React from 'react'
 import { Stack } from 'expo-router'
-import Colors from '../constants/colors'
+import { Colors } from '../constants'
 import { Providers } from '../context'
 
 const RootLayout = () => {

@@ -1,6 +1,6 @@
 import { Pressable, PressableProps, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Colors from '../constants/colors'
+import { Colors } from '../constants'
 
 interface Props {
     variant?: 'primary' | 'secondary' | 'warn' | undefined,

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Tanks } from '../types'
-import Colors from '../constants/colors'
+import { Colors } from '../constants'
 
 interface Props {
   tank: Tanks

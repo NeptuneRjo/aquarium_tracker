@@ -1,11 +1,9 @@
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useContext, useState } from 'react'
-import GlobalStyles from '../../constants/styles'
-import Colors from '../../constants/colors'
+import { Colors, GlobalStyles } from '../../constants'
 import { useUser } from '@clerk/clerk-expo'
-import TankService from '../../services/tankService'
-import { Stack, useNavigation, useRouter } from 'expo-router'
-import { LocalStorage } from '../../services'
+import { Stack, useRouter } from 'expo-router'
+import { LocalStorage, TankService } from '../../services'
 import { AppContext } from '../../context'
 
 const Create = () => {
