@@ -1,2 +1,2 @@
-export * from './LocalStorage';
-export * from './tankService'
+export { default as LocalStorage } from './LocalStorage';
+export { default as TankService } from './TankService'
