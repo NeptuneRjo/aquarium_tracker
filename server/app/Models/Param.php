@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Param extends Model
@@ -25,7 +26,7 @@ class Param extends Model
         return $this->hasMany(ParamNodes::class);
     }
 
-    public function tanks()
+    public function tank()
     {
         return $this->belongsTo(Tank::class);
     }
