@@ -1,4 +1,4 @@
-import { Param, ApiResponse } from '../types'
+import { ApiResponse, Tank } from '../types'
 
 const BASE_ROUTE = process.env.EXPO_PUBLIC_API_URL
 
@@ -6,8 +6,8 @@ const createParam = async (
     clerk_id: string, 
     param_ulid: string, 
     value: number
-): Promise<ApiResponse<Param>> => {
-    return fetch(`${BASE_ROUTE}/nodes`, {
+): Promise<ApiResponse<Tank>> => {
+    return fetch(`${BASE_ROUTE}/api/nodes`, {
         method: 'POST',
         headers: {
             'Clerk-Id': clerk_id,

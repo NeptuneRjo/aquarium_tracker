@@ -7,7 +7,7 @@ import { Tank } from '../../types'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import { Button, ParamView } from '../../components'
 import { AppContext } from '../../context'
-import { LocalStorage, TankService } from '../../services'
+import { LocalStorage, ParamService, TankService } from '../../services'
 
 interface Route {
   key: string,
@@ -97,6 +97,16 @@ const TankPage = () => {
       })
   }
 
+  const addValue = async (value: number, param_ulid: string) => {
+    setLoading(true)
+    ParamService.createParam(user!.id, param_ulid, value)
+      .then(async ({ data, status }) => {
+          await LocalStorage.setData(`@tank-${data.ulid}`, data) 
+          setTank(data)
+          setLoading(false)
+      })
+  }
+
   useEffect(() => {
     if (isLoaded) {
       ;(async() => await getAndSetTank())()
@@ -114,7 +124,7 @@ const TankPage = () => {
 
   const renderScene = ({ route }: { route: Route }) => {
     const param = tank.params.find((item) => item.name === route.key)!
-    return <ParamView param={param} />
+    return <ParamView param={param} addValue={addValue} />
   }
   
   const routes: Route[] = tank.params.map((param) => {

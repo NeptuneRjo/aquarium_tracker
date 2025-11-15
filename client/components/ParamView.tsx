@@ -1,14 +1,18 @@
-import { StyleSheet, View, Text, FlatList } from 'react-native'
-import React from 'react'
+import { StyleSheet, View, Text, FlatList, TextInput, Pressable } from 'react-native'
+import React, { useState } from 'react'
 import { Param, ParamNode } from '../types'
 import { LineChart } from 'react-native-gifted-charts'
 import { Colors } from '../constants'
+import Button from './Button'
 
 interface Props {
-  param: Param
+  param: Param,
+  addValue: (value: number, param_ulid: string) => Promise<void>
 }
 
-const ParamView = ({ param }: Props) => {
+const ParamView = ({ param, addValue }: Props) => {
+  const [value, setValue] = useState<string | undefined>()
+  
   const dateStringOptions: Intl.DateTimeFormatOptions = {
     day: '2-digit',
     month: '2-digit'
@@ -24,23 +28,31 @@ const ParamView = ({ param }: Props) => {
     }
   })
 
-  interface RowProps {
-   item: ParamNode 
+  const onChangeText = (text: string) => {
+    // remove non-numeric characters
+    const cleansedText = text.replace(/[^0-9]/g, '')
+    setValue(cleansedText)
   }
 
-  const item = ({ item }: RowProps) => (
-    <View style={styles.item}>
-      <View style={styles.itemDate}>
-        <Text style={{ fontWeight: 500 }}>{new Date(item.created_at).toLocaleDateString('en-US')}</Text>
+  const row = ({ item }: { item: ParamNode }) => {
+    const { created_at, value } = item
+    const date = new Date(created_at).toLocaleDateString('en-US')
+
+    return (
+      <View style={styles.item}>
+        <View style={styles.itemDate}>
+          <Text style={{ fontWeight: 500 }}>
+            {date}
+          </Text>
+        </View>
+        <View style={styles.itemValue}>
+          <Text style={{ fontWeight: 500 }}>{value}</Text>
+        </View>
+        <View style={styles.itemUnit}>
+          <Text style={{ fontWeight: 700 }}>{param.unit}</Text>
+        </View>
       </View>
-      <View style={styles.itemValue}>
-        <Text style={{ fontWeight: 500 }}>{item.value}</Text>
-      </View>
-      <View style={styles.itemUnit}>
-        <Text style={{ fontWeight: 700 }}>{param.unit}</Text>
-      </View>
-    </View>
-  )
+    )}
 
   return (
       <View style={styles.container}>
@@ -58,12 +70,22 @@ const ParamView = ({ param }: Props) => {
             showScrollIndicator={true}
             noOfSections={5}
             adjustToWidth={true}
-        />
+          />
         </View>
         <View style={styles.table}>
+          <View style={[{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 42, marginVertical: 18, gap: 18 }]}>
+            <TextInput
+              style={styles.input}
+              keyboardType='numeric'
+              onChangeText={onChangeText}
+            />
+            <Button onPress={async () => await addValue(Number(value), param.ulid)} disabled={value === undefined}>
+              Add Value
+            </Button>
+          </View>
           <FlatList 
             data={param.values} 
-            renderItem={item} 
+            renderItem={row} 
             keyExtractor={node => node.ulid}
           />
         </View>
@@ -110,5 +132,10 @@ const styles = StyleSheet.create({
   },
   itemUnit: {
     width: 100
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: Colors.border,
+    flex: 1
   }
 })

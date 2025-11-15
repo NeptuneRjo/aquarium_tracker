@@ -26,13 +26,11 @@ export const AppProvider = ({ children }: { children: any }) => {
             const storedValues = await LocalStorage.getData('@tanks')
             if (storedValues !== null) {
                 setTanks(storedValues)
-                console.log('stored')
             } else {
                 TankService.getAllTanks(user.id)
                 .then(async ({ data }) => {
                     await LocalStorage.setData('@tanks', data)
                     setTanks(data)
-                    console.log('api')
                 })
                 .catch((err) => setError(err))
             }
