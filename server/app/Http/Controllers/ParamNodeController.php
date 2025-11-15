@@ -10,6 +10,8 @@ use App\Models\Param;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Exception;
+use App\Helpers\ApiResponse;
+use App\Http\Resources\TankResource;
 
 class ParamNodeController extends Controller
 {
@@ -22,25 +24,26 @@ class ParamNodeController extends Controller
                 'param_ulid' => 'required|string|max:26',
             ]);
 
-            $param = Param::where('clerk_id', $clerk_id)
+            $param = Param::with('tank')->where('clerk_id', $clerk_id)
                 ->where('param_ulid', $validated['param_ulid'])
                 ->firstOrFail();
-            $param_node = $param->param_nodes()->create([
+            $param->param_nodes()->create([
                 'param_value' => $validated['value'],
                 'clerk_id' => $clerk_id
             ]);
+            $tank = $param->tank;
 
-            return response()
-                ->json(ParamResource::make($param), 200);
+            return ApiResponse::response(TankResource::make($tank));
         } catch (ModelNotFoundException $e) {
             $message = "No param found with that ULID.";
-            return response()->json($message, 404);
+            return ApiResponse::response([], 404, $message);
+            // return response()->json($message, 404);
         } catch (ValidationException $e) {
-            echo $e->getMessage();
-            return response()->json([$e->getMessage()], 400);
+            $message = "Invalid data";
+            return ApiResponse::response([], 400, $message);
         } catch (Exception $e) {
-            echo $e->getMessage();
-            return response()->json([$e->getMessage()], 400);
+            error_log($e->getMessage());
+            return ApiResponse::response(null, 400, get_class($e));
         }
     }
 
