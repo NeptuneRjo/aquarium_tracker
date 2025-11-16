@@ -27,13 +27,14 @@ const Create = () => {
       }
       TankService.createTank(user.id, item)
         .then(async ({ status, data, message }) => {
-          if (status !== 200 && message.length > 0) {
+          if (status !== 200) {
             setError(message)
             setLoading(false)
             return
           }
   
           await LocalStorage.removeData('@tanks')
+          setLoading(false)
           navigation.navigate('/')
         })      
     }
