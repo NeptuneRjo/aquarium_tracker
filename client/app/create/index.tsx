@@ -9,7 +9,7 @@ import { AppContext } from '../../context'
 const Create = () => {
   const { user, isSignedIn, isLoaded } = useUser()
   const navigation = useRouter()
-  const { loading, setLoading } = useContext(AppContext)
+  const { loading, setLoading, getAndSetTanks } = useContext(AppContext)
 
   const [tankName, setTankName] = useState<string>('')
   const [tankDescription, setTankDescription] = useState<string>('')
@@ -34,7 +34,8 @@ const Create = () => {
           }
   
           await LocalStorage.removeData('@tanks')
-          setLoading(false)
+          getAndSetTanks()
+          navigation.dismissAll()
           navigation.navigate('/')
         })      
     }

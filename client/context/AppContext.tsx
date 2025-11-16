@@ -8,7 +8,8 @@ export const AppContext = createContext<iAppContext>({
     error: null,
     loading: true,
     setLoading: () => console.error('setLoading was called without AppContext.Provider'),
-    setTanks: () => console.error('setTanks was called without AppContext.Provider')
+    setTanks: () => console.error('setTanks was called without AppContext.Provider'),
+    getAndSetTanks: async () => console.error('getAndSetTanks was called without AppContext.Provider')
 })
 
 export const AppProvider = ({ children }: { children: any }) => {
@@ -28,11 +29,14 @@ export const AppProvider = ({ children }: { children: any }) => {
                 setTanks(storedValues)
             } else {
                 TankService.getAllTanks(user.id)
-                .then(async ({ data }) => {
+                .then(async ({ data, message, status }) => {
+                    if (status !== 200) {
+                        setError(message)
+                        return
+                    }
                     await LocalStorage.setData('@tanks', data)
                     setTanks(data)
                 })
-                .catch((err) => setError(err))
             }
         }
         setLoading(false)
@@ -49,8 +53,9 @@ export const AppProvider = ({ children }: { children: any }) => {
         loading,
         error,
         setLoading,
-        setTanks
-    }), [tanks, loading, error, setLoading, setTanks])
+        setTanks,
+        getAndSetTanks
+    }), [tanks, loading, error, setLoading, setTanks, getAndSetTanks])
 
     return (
         <AppContext.Provider value={contextValue}>

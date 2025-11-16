@@ -39,5 +39,6 @@ export interface iAppContext {
     loading: boolean, 
     error: any,
     setLoading: Dispatch<SetStateAction<boolean>>,
-    setTanks: Dispatch<SetStateAction<Tanks[]>>
+    setTanks: Dispatch<SetStateAction<Tanks[]>>,
+    getAndSetTanks: () => Promise<void>
 }
