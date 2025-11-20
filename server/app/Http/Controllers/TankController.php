@@ -143,12 +143,12 @@ class TankController extends Controller
 
             $success_message = 'Tank ' . $request->tank_ulid . ' successfully deleted.';
 
-            return ApiResponse::response([], 200, $success_message);
+            return ApiResponse::response(null, 200, $success_message);
         } catch (ModelNotFoundException $e) {
             $message = "No tank found with that ULID.";
-            return response()->json($message, 404);
+            return ApiResponse::response(null, 404, $message);
         } catch (Exception $e) {
-            return response()->json([$e->getMessage()], 400);
+            return ApiResponse::response(null, 500, $e->getMessage());
         }
     }
 }
