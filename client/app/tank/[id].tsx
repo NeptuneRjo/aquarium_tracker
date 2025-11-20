@@ -19,7 +19,7 @@ const TankPage = () => {
   const { user, isSignedIn, isLoaded } = useUser()
   const { id } = useLocalSearchParams()
   const navigation = useRouter()
-  const { loading, setLoading, setTanks } = useContext(AppContext)
+  const { loading, setLoading, getAndSetTanks } = useContext(AppContext)
   
   const [tank, setTank] = useState<Tank>()
   const [error, setError] = useState<any>()
@@ -29,7 +29,7 @@ const TankPage = () => {
   const [tankName, setTankName] = useState<string | undefined>()
   const [tankDescription, setTankDescription] = useState<string | undefined>()
   const [modalLoading, setModalLoading] = useState<boolean>(false)
-
+  
   const getAndSetTank = async () => {
     setLoading(true)
     const storedValue = await LocalStorage.getData(`@tank-${id}`)
@@ -48,19 +48,25 @@ const TankPage = () => {
   }
 
   const deleteTank = async () => {
-    if (tank !== undefined) {
-      setModalLoading(true)
-      TankService.deleteTank(user!.id, tank.ulid)
-        .then(async () => {
-          LocalStorage.removeData(`@tank-${tank.ulid}`)
-            .then(async () => {
-              await LocalStorage.removeData('@tanks')
-              setModalVisible(false)
-              navigation.dismissAll()
-              navigation.replace('/')
-            })
-        }).catch((err) => console.log(err))
-    }
+    setModalLoading(true)
+    TankService.deleteTank(user!.id, tank!.ulid)
+      .then(async ({ status, message }) => {
+        if (status === 500) {
+          setError(message)
+          setModalLoading(false)
+        }
+        await LocalStorage.removeData(`@tank-${tank!.ulid}`)
+        await LocalStorage.removeData('@tanks')
+
+        setModalLoading(false)
+        setModalVisible(false)
+        setTank(undefined)
+
+        await getAndSetTanks()    
+
+        navigation.dismissAll()
+        navigation.replace('/')
+      })
   }
 
   const updateTank = async () => {
@@ -77,14 +83,6 @@ const TankPage = () => {
     }
   }
 
-  const getAndSetTanks = async () => {
-    TankService.getAllTanks(user!.id)
-      .then(async ({ data }) => {
-        await LocalStorage.setData('@tanks', data)
-        setTanks(data)
-      })
-      .catch((err) => setError(err))
-  }
 
   const handleUpdate = async () => {
     setModalLoading(true)
