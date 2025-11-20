@@ -53,7 +53,7 @@ const updateTank = async (
 const deleteTank = async (
     clerk_id: string, 
     tank_ulid: string
-): Promise<ApiResponse<[]>> => {
+): Promise<ApiResponse<null>> => {
     return fetch(`${BASE_ROUTE}/api/tanks/${tank_ulid}`, {
         headers: { 'Clerk-Id': clerk_id },
         method: 'DELETE'
